@@ -40,6 +40,7 @@ class Main():
                 print(self._girlfriend_name + ": " + your_phrase_sub + "ってことなの？ふーん。");
             else:
                 print(self._girlfriend_name + ": " + random.choice(_word_list[self._emotional_mode]));
+            self.EmotionMoved(your_phrase);
 
     def LearnPhrase(self, your_phrase, your_phrase_sub):
         global _emotional_mode;
@@ -48,12 +49,17 @@ class Main():
         with open(self.PHRASE_PASS, 'w') as outfile:
             json.dump(_word_list, outfile);
 
-    def EmotionMoved(self):
+    def EmotionMoved(self, your_phrase):
         global _love_score;
         global _emotional_mode;
-        _love_score += 0.5;
-        print("現在の高感度: " + _love_score);
-        if _love_score > 0:
+        if your_phrase in _word_list["GOOD"]:
+            self._love_score += 1.0;
+        elif your_phrase in _word_list["BAD"]:
+            self._love_score -= 1.0;
+        else:
+            self._love_score += 0.5;
+        print("現在の高感度: " + str(self._love_score));
+        if self._love_score > 0:
             _emotional_mode = "GOOD";
         else:
             _emotional_mode = "BAD";
