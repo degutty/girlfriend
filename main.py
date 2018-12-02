@@ -13,15 +13,11 @@ class Main():
         print("帰るときは『バイバイ』って言って。");
 
     def Response(self):
-        # おしゃべりフラグ
-        is_talking = True;
-
-        # おしゃべりフラグがTrueの場合、しゃべり続ける
-        while is_talking:
+        while True:
             your_phrase = input("> ");
             if your_phrase == "バイバイ":
-                is_talking = False;
                 print(_your_name + "、またね。");
+                break;
             else:
                 print(random.choice(self._word_list));
 
