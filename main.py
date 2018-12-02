@@ -1,15 +1,22 @@
 import random
+import json
 
 class Main():
-    PHRASE_PASS = 'phrase.txt';
-    _your_name = "";
+    PHRASE_PASS = 'phrase.json';
     _girlfriend_name = "girlfriend";
+    _emotional_mode = "GOOD";
+    _love_score = 0;
+    _your_name = "";
     _word_list = [];
 
     def __init__(self):
         global _word_list;
-        with open(self.PHRASE_PASS) as f:
-            _word_list = [s.strip() for s in f.readlines()];
+        try:
+            # ローカルJSONファイルの読み込み
+            with open(self.PHRASE_PASS, 'r') as f:
+                _word_list = json.load(f);
+        except json.JSONDecodeError as e:
+            print('JSONDecodeError: ', e);
         
     def SetName(self):
         global _your_name;
@@ -19,6 +26,7 @@ class Main():
         print(self._girlfriend_name + ": 帰るときは『バイバイ』って言って。");
 
     def Response(self):
+        global _emotional_mode;
         while True:
             your_phrase = input("> ");
             is_what_mean = random.choice([True, False, False]);
@@ -31,14 +39,25 @@ class Main():
                 self.LearnPhrase(your_phrase, your_phrase_sub);
                 print(self._girlfriend_name + ": " + your_phrase_sub + "ってことなの？ふーん。");
             else:
-                print(self._girlfriend_name + ": " + random.choice(_word_list));
+                print(self._girlfriend_name + ": " + random.choice(_word_list[self._emotional_mode]));
 
     def LearnPhrase(self, your_phrase, your_phrase_sub):
+        global _emotional_mode;
         global _word_list;
-        _word_list.append(your_phrase);
-        f = open(self.PHRASE_PASS, "a");
-        f.writelines(your_phrase);
-        f.close();
+        _word_list[self._emotional_mode].append(your_phrase);
+        with open(self.PHRASE_PASS, 'w') as outfile:
+            json.dump(_word_list, outfile);
+
+    def EmotionMoved(self):
+        global _love_score;
+        global _emotional_mode;
+        _love_score += 0.5;
+        print("現在の高感度: " + _love_score);
+        if _love_score > 0:
+            _emotional_mode = "GOOD";
+        else:
+            _emotional_mode = "BAD";
+
 
 main = Main();
 main.SetName();
