@@ -60,9 +60,9 @@ class Main():
             self._love_score += 0.5;
         print("現在の高感度: " + str(self._love_score));
         if self._love_score > 0:
-            _emotional_mode = "GOOD";
+            self._emotional_mode = "GOOD";
         else:
-            _emotional_mode = "BAD";
+            self._emotional_mode = "BAD";
 
 
 main = Main();
